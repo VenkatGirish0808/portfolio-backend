@@ -17,10 +17,10 @@ const allowlist = [
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (!origin) return cb(null, true); // Postman / curl
-      return allowlist.includes(origin)
-        ? cb(null, true)
-        : cb(new Error("CORS blocked"));
+      if (!origin || allowlist.includes(origin)) {
+        return cb(null, true);
+      }
+      return cb(new Error("❌ CORS: Origin not allowed"));
     },
   })
 );
@@ -41,7 +41,7 @@ mongoose
   .then(() => {
     console.log("✅ MongoDB connected");
     app.listen(PORT, () =>
-      console.log(`🚀 API running on http://localhost:${PORT}`)
+      console.log(`🚀 API running on port ${PORT}`)
     );
   })
   .catch((err) => {
