@@ -7,12 +7,10 @@ require("dotenv").config();
 const contactRoutes = require("./routes/contact");
 const app = express();
 
-// ✅ CORS Setup
-const allowlist = [
-  process.env.FRONTEND_ORIGIN,
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-].filter(Boolean);
+const allowlist = (process.env.FRONTEND_ORIGIN || "")
+  .split(",")
+  .map(o => o.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
@@ -24,6 +22,7 @@ app.use(
     },
   })
 );
+
 
 app.use(express.json());
 
